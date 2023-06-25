@@ -32,10 +32,10 @@ else()
 endif()
 
 if (MSVC)
-	set(DATA_DIR $<TARGET_FILE_DIR:ProbulatorGUI>/../Data) # Default Visual Studio workind directory is $(ProjectDir)
-else()
-	set(DATA_DIR $<TARGET_FILE_DIR:ProbulatorGUI>/Data)
+	set(DATA_DIR ${CMAKE_SOURCE_DIR}/Data)
 endif()
 
+set(SRC_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../Data)
 add_custom_command(TARGET ProbulatorGUI POST_BUILD 
-	${DATA_CMD} ${CMAKE_SOURCE_DIR}/Data ${DATA_DIR})
+	${DATA_CMD} ${CMAKE_CURRENT_SOURCE_DIR}/../../Data ${DATA_DIR})
+message(STATUS "Post Build: copy data from ${SRC_DATA_DIR} to ${DATA_DIR}")
