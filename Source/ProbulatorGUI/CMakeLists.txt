@@ -1,6 +1,6 @@
 add_definitions(-DNOMINMAX=1) # Never want min/max macros from Windows.h
 
-add_executable(ProbulatorGUI
+add_library(ProbulatorGUI
 	Blitter.cpp
 	Blitter.h
 	Camera.cpp
@@ -16,7 +16,8 @@ add_executable(ProbulatorGUI
 	Shaders.cpp
 	Shaders.h
 )
-target_link_libraries(ProbulatorGUI 
+target_include_directories(ProbulatorGUI PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(ProbulatorGUI PUBLIC
 	Probulator 
 	gl3w 
 	glfw 
@@ -24,6 +25,11 @@ target_link_libraries(ProbulatorGUI
 	nfd
 	tinyobjloader
 )
+target_compile_definitions(ProbulatorGUI PUBLIC NOMINMAX=1)
+
+add_executable(ProbulatorGUIMain Main.cpp)
+target_link_libraries(ProbulatorGUIMain PRIVATE ProbulatorGUI)
+
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	set(DATA_CMD COMMAND ${CMAKE_COMMAND} -E copy_directory) # CMake doesn't support symlinks on Windows
