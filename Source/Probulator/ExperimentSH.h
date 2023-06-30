@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Probulator/Experiments.h>
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
 
 namespace Probulator
 {
@@ -11,11 +13,26 @@ public:
 	{
 		SphericalHarmonicsT<vec3, L> shRadiance = {};
 
+        std::string name = "sh-probulator";
+        auto logger = spdlog::get(name);
+        if (!logger) {
+            logger = spdlog::basic_logger_mt(name, "logs/probulator-sh-eval.txt");
+        }
+
 		const ivec2 imageSize = data.m_outputSize;
 		data.m_directionImage.forPixels2D([&](const vec3& direction, ivec2 pixelPos)
 		{
 			float texelArea = latLongTexelArea(pixelPos, imageSize);
 			vec3 radiance = (vec3)data.m_radianceImage.at(pixelPos);
+
+			auto val = texelArea * radiance;
+			//logger->info("radiance: {}, {}, {}", val.x, val.y, val.z);
+
+            auto sh = shEvaluate<L>(direction);
+            for (int i = 0; i < shSize(L); ++ i) {
+                logger->info("dir: {}, {}, {}, sh[{}]={}", direction.x, direction.y, direction.z, i, sh[i]);
+            }
+
 			shAddWeighted(shRadiance, shEvaluate<L>(direction), radiance * texelArea);
 		});
 

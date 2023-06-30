@@ -10,16 +10,6 @@
 namespace Probulator
 {
 
-template <typename T> 
-inline T& addExperiment(ExperimentList& list, const char* name, const char* suffix)
-{
-    T* e = new T;
-    list.push_back(std::unique_ptr<Experiment>(e));
-    e->m_name = name;
-    e->m_suffix = suffix;
-    return *e;
-}
-
 void addAllExperiments(ExperimentList& experiments)
 {
     const u32 lobeCount = 12; // <-- tweak this
