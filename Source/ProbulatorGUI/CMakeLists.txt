@@ -26,6 +26,7 @@ target_link_libraries(ProbulatorGUI PUBLIC
 	tinyobjloader
 )
 target_compile_definitions(ProbulatorGUI PUBLIC NOMINMAX=1)
+set_property(TARGET ProbulatorGUI PROPERTY CXX_STANDARD 11)
 
 add_executable(ProbulatorGUIMain Main.cpp)
 target_link_libraries(ProbulatorGUIMain PRIVATE ProbulatorGUI)
